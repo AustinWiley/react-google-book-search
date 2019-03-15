@@ -27,10 +27,18 @@ class Home extends Component {
     console.log('clicky click')
     console.log(this.state.bookSearch)
     API.search(this.state.bookSearch)
-      .then(res => this.setState({books: res.data.items }))
+      .then(res => {
+        this.setState({books: res.data.items })
+      })
       .then(console.log(this.state.books))
       .catch(err => console.log(err));
   };
+  // title: { type: String, required: true },
+  // author: { type: String, required: true },
+  // description: { type: String, required: true },
+  // image: { type: String, required: true },
+  // link: { type: String, required: true },
+  // date: { type: Date, default: Date.now }
   
   render() {
     // console.log("New is " + JSON.stringify(this.state))
