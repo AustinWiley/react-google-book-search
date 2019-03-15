@@ -8,8 +8,8 @@ import API from "../utils/API";
 class Home extends Component {
 
   state = {
-    recipes: [],
-    recipeSearch: ""
+   books: [],
+    bookSearch: ""
   };
 
   handleInputChange = event => {
@@ -22,10 +22,13 @@ class Home extends Component {
   };
 
   handleFormSubmit = event => {
-    // When the form is submitted, prevent its default behavior, get recipes update the recipes state
+    // When the form is submitted, prevent its default behavior, getbooks update thebooks state
     event.preventDefault();
-    API.getRecipes(this.state.recipeSearch)
-      .then(res => this.setState({ recipes: res.data }))
+    console.log('clicky click')
+    console.log(this.state.bookSearch)
+    API.search(this.state.bookSearch)
+      .then(res => this.setState({books: res.data.items }))
+      .then(console.log(this.state.books))
       .catch(err => console.log(err));
   };
   
@@ -34,8 +37,27 @@ class Home extends Component {
     return (
     <React.Fragment>
         <div className = "container">
-          <SearchForm newQuery={this.newQuery}/>
-          <Results results={this.state}/>
+          <SearchForm
+                                  name="bookSearch"
+                                  value={this.state.bookSearch}
+                                  onChange={this.handleInputChange}
+                                  placeholder="Search For a book"
+                                  onClick={this.handleFormSubmit}
+          />
+          <section>
+          {this.state.books.map(book => {
+                    return (
+                      <Results
+                        key={book.volumeInfo.title}
+                        title={book.volumeInfo.title}
+                        author={book.volumeInfo.authors}
+                        href={book.volumeInfo.infoLink}
+                        description={book.volumeInfo.description}
+                        thumbnail={book.volumeInfo.imageLinks.smallThumbnail ? book.volumeInfo.imageLinks.smallThumbnail : "http://books.google.com/books/content?id=VO8nDwAAQ…=frontcover&img=1&zoom=5&edge=curl&source=gbs_api" }
+                      />
+                    );
+                  })}
+          </section>
         </div>
     </React.Fragment>
     )

@@ -12,11 +12,11 @@ function Form(props) {
 
                 <label class="label">Search for Books</label>
                 <div class="control">
-                    <input class="input" type="text" placeholder="Book Name" {...props} />
+                    <input class="input" type="text" placeholder={props.placeholder} value={props.value} name={props.name} onChange={props.onChange} />
                 </div>
                 <br />
                 <div class="control">
-                    <button class="button is-link">Submit</button>
+                    <button class="button is-link" onClick={props.onClick}>Submit</button>
                 </div>
               
             </div>
