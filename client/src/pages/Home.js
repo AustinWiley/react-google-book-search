@@ -1,13 +1,12 @@
 import React, {Component} from "react";
-
 /////////////////////////////////////////////// /* Components */ ////////////////////////////////////////////////////////
 import SearchForm from "../components/Form";
 import Results from "../components/ResultCard";
 import API from "../utils/API";
 
 class Home extends Component {
-
   state = {
+    clear: [],
    books: [],
     bookSearch: ""
   };
@@ -24,21 +23,41 @@ class Home extends Component {
   handleFormSubmit = event => {
     // When the form is submitted, prevent its default behavior, getbooks update thebooks state
     event.preventDefault();
+    this.setState({ books: this.state.clear})
     console.log('clicky click')
     console.log(this.state.bookSearch)
     API.search(this.state.bookSearch)
       .then(res => {
-        this.setState({books: res.data.items })
+        const results = res.data.items;
+        const collections = [];
+        results.map(book => {
+          const info = book.volumeInfo;
+          const volume = {
+            title: info.title,
+            author: info.authors,
+            description: info.description ? info.description : "Presents the life and accomplishments of the American author, discussing such topics as his service in the First World War, the publication of his short stories and novels, and his award of the Nobel prize for literature in 1954.",
+            image: info.imageLinks.smallThumbnail ? info.imageLinks.smallThumbnail : "http://books.google.com/books/content?id=VO8nDwAAQ…=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+            link: info.infoLink
+          };
+          collections.push(volume)
+        })
+        console.log(collections)
+        this.setState({ books: collections})
       })
-      .then(console.log(this.state.books))
       .catch(err => console.log(err));
   };
-  // title: { type: String, required: true },
-  // author: { type: String, required: true },
-  // description: { type: String, required: true },
-  // image: { type: String, required: true },
-  // link: { type: String, required: true },
-  // date: { type: Date, default: Date.now }
+
+  handleSaveSubmit = event => {
+    event.preventDefault();
+    let bookData =  JSON.parse(event.target.getAttribute('value'))
+    console.log(bookData)
+    console.log(this.state.books.indexOf(bookData))
+    API.saveBook(bookData)
+      .then(res => {
+        console.log(' Book saved!!')
+      })
+      .catch(err => console.log(err))
+  };
   
   render() {
     // console.log("New is " + JSON.stringify(this.state))
@@ -46,22 +65,25 @@ class Home extends Component {
     <React.Fragment>
         <div className = "container">
           <SearchForm
-                                  name="bookSearch"
-                                  value={this.state.bookSearch}
-                                  onChange={this.handleInputChange}
-                                  placeholder="Search For a book"
-                                  onClick={this.handleFormSubmit}
+                    name="bookSearch"
+                    value={this.state.bookSearch}
+                    onChange={this.handleInputChange}
+                    placeholder="Search For a book"
+                    onClick={this.handleFormSubmit}
           />
+           <h1 className="centered">SEARCH RESULTS</h1>
           <section>
           {this.state.books.map(book => {
                     return (
                       <Results
-                        key={book.volumeInfo.title}
-                        title={book.volumeInfo.title}
-                        author={book.volumeInfo.authors}
-                        href={book.volumeInfo.infoLink}
-                        description={book.volumeInfo.description}
-                        thumbnail={book.volumeInfo.imageLinks.smallThumbnail ? book.volumeInfo.imageLinks.smallThumbnail : "http://books.google.com/books/content?id=VO8nDwAAQ…=frontcover&img=1&zoom=5&edge=curl&source=gbs_api" }
+                      key={book.title}
+                      title={book.title}
+                      author={book.author}
+                      href={book.link}
+                      description={book.description}
+                      thumbnail={book.image}
+                      value={book}
+                      onClick={this.handleSaveSubmit}
                       />
                     );
                   })}

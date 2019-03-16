@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import Saved from "./pages/Saved";
 import Nav from "./components/Nav";
 import Hero from "./components/Hero";
+import Footer from "./components/Footer";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route exact path="/" component={Home}/>
           <Route path="/Saved" component={Saved}/>
         </Switch>
+        <Footer />
       </div>
     </Router>
   );

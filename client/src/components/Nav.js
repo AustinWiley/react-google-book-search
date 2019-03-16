@@ -5,10 +5,10 @@ function Nav() {
     <nav className="navbar is-danger" role="navigation" aria-label="main navigation">
         <div id="navbarBasicExample" className="navbar-menu">
             <div className="navbar-start">
-                <a className="navbar-item">
+                <a className="navbar-item" href="/">
                     Home
                 </a>
-                <a className="navbar-item">
+                <a className="navbar-item" href="/saved">
                     Saved
                 </a>
             </div>

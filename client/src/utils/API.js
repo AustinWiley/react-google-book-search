@@ -8,14 +8,15 @@ export default {
     console.log(BASEURL + query.trim().replace(/ /g,"%20"));
     return axios.get(BASEURL + query.trim().replace(/ /g,"%20"));
   },
-  saveArticle: function(articleObject){
-    return axios.post('/saveArticle', articleObject);
+  saveBook: function(bookObject){
+    return axios.post('api/books/', bookObject);
   },
-  getSavedArticles: function(){
-    return axios.get('/getSavedArticles');
+  getBooks: function(){
+    console.log('getting books')
+    return axios.get('/api/books/');
   },
-  deleteSavedArticle: function(id){
-    return axios.delete('/deleteSavedArticle', {data: {articleId: id}})
+  deleteBook: function(id){
+    return axios.delete('/api/books/' + id)
   }
 
 };

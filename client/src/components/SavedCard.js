@@ -22,7 +22,7 @@ function ResultCard(props) {
                 </div>
                 <div className="media-left">
                     <a className="button button-right is-primary remove-button" href={props.href}>View</a>
-                    <a className="button button-right is-primary remove-button" onClick={props.onClick} value={JSON.stringify(props.value)}>Save</a>
+                    <a className="button button-right is-primary remove-button" onClick={props.onClick} value={props.id}>Delete</a>
                 </div>
             </article>
         </div>
